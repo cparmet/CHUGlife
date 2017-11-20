@@ -28,8 +28,10 @@ def index():
 
         comments,IG_links=be.CHUG_it(search_term,comments,IG_links)
 
-        comments.append('Results for '+search_term + '...')
-        IG_links.append(IG_links)
+        if len(IG_links)==1:
+            comments.append("Here's your " + search_term + "...")
+        if len(IG_links)>1:
+            comments.append("Here are your " + search_term + " shots" + "...")
 
         # This tells browser "Please request this page again, this time using a 'GET' method", so that the user can see the results of their post
         return redirect(url_for('index'))

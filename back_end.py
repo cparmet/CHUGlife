@@ -26,9 +26,10 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
     data_df_patched = data_df_unpatched.copy()
 
     # Import my patches
-    Anomaly_fix = pd.read_csv('chuglife/patches.csv', header=0)
+    Anomaly_fix = pd.read_excel('chuglife/patches.xls', header=0)
 
     # To get CSV file working right, i added an extra ' at end of display_src. Remove it.
+    # And note, to fix an issue with IG servers changing, display_src in patches file is only the jpg name.
     Anomaly_fix.columns = ['display_src', 'caption']
     Anomaly_fix.set_index('display_src', inplace=True)
 
@@ -39,30 +40,35 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
 
     for i in Anomaly_fix.index:
 
-        # Find the indices in downloaded IG data that match the rows I have in Anomaly_fix csv
-        IG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['display_src'] == i]
+        # Find the indices in downloaded IG data that match the rows I have in Anomaly_fix csvIG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['display_src'] == i]
+
+        # IG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['display_src'] == i]
+
+        matches=0
+        for j in data_df_patched.index:
+            if i in data_df_patched.ix[j, 'display_src']:
+                index_of_IG_data_to_patch = j
+                matches+=1 # If there's more than 1 match, this 'for' loop will only save the last match. But this counter will be >1.
 
         ########
         # Soft QC. Use this opportunity for extra QC of the downloaded IG data.
-
         # All display_srcs from the Anomaly_fix CSV should be in downloaded IG data
-        if len(IG_match_for_this_patch_row) == 0:
+        if matches == 0:
             comments.append('Warning: A post in patch CSV was not downloaded from IG.')
             continue
 
-        if len(IG_match_for_this_patch_row) > 1:  # Each display_src should only occur once
-            comments.append('Error: I have duplicate posts in downloads. Shouldve been deduped by now.')
-            comments.append(IG_match_for_this_patch_row)
+        if matches > 1:  # Each display_src should only occur once
+            comments.append("Error: I have duplicate posts in downloads. Should've been de-duped by now.")
+            # comments.append(IG_match_for_this_patch_row)
             # Just keep the first one. Cuz really, all that matters in this kind of a database is that it's there once.
-            IG_match_for_this_patch_row = IG_match_for_this_patch_row.head(1)
+            # IG_match_for_this_patch_row = IG_match_for_this_patch_row.head(1)
 
             # At this point, we've ensured IG_match_for_this_patch_row is only 1 match.
         ########
 
-        index_of_IG_data_to_patch = IG_match_for_this_patch_row.index
         data_df_patched.ix[index_of_IG_data_to_patch, 'caption'] = Anomaly_fix.ix[i, 'caption']
 
-    return data_df_patched,comments
+    return data_df_patched, comments
 
 
 def check_for_null_captions(posts_df,comments):
@@ -83,7 +89,7 @@ def CHUG_it(search_term,comments,IG_links):
     posts_df.drop_duplicates(subset=['display_src'], inplace=True)
 
     # QC:
-    comments.append('Reviewed '+ str(len(posts_df)) + 'lovely birds.')
+    comments.append('Reviewed '+ str(len(posts_df)) + ' award-winning photos.')
 
     posts_df,comments = patch_captions_that_are_NAN_or_anomaly(posts_df,comments)
 
