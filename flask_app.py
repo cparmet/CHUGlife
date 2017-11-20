@@ -24,7 +24,13 @@ def index():
         return render_template("main_page.html", comments=comments_to_display, IG_links=IG_links_to_display)
 
     if request.method == 'POST':
-        IG_links.append(request.form["search_term"])
-        # This tells browser "Please request this page again, this time using a 'GET' method", so that the user can see the results of their post
+        search_term=request.form["search_term"]
 
+        comments,IG_links=be.CHUG_it(search_term,comments,IG_links)
+
+        comments.append('Results for '+search_term + '...')
+        IG_links.append(IG_links)
+
+        # This tells browser "Please request this page again, this time using a 'GET' method", so that the user can see the results of their post
         return redirect(url_for('index'))
+

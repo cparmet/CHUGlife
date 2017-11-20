@@ -17,7 +17,7 @@ def download_all_photochug_posts():
         #     time.sleep(0.1)
     return downloaded_posts_df
 
-def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched):
+def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
     '''
     This function fixes captions that are entered differently on Instagram.
     It uploads patches from a CSV file and applies them.
@@ -26,7 +26,7 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched):
     data_df_patched = data_df_unpatched.copy()
 
     # Import my patches
-    Anomaly_fix = pd.read_csv('../data/NAN_and_anomaly_fixes.csv', header=0)
+    Anomaly_fix = pd.read_csv('chuglife/patches.csv', header=0)
 
     # To get CSV file working right, i added an extra ' at end of display_src. Remove it.
     Anomaly_fix.columns = ['display_src', 'caption']
@@ -43,17 +43,16 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched):
         IG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['display_src'] == i]
 
         ########
-        # Soft QC. Maybe move these Prints to an Error log, or to an email. No reason to stop the party.
-        # Use this opportunity for extra QC of the downloaded IG data.
+        # Soft QC. Use this opportunity for extra QC of the downloaded IG data.
 
         # All display_srcs from the Anomaly_fix CSV should be in downloaded IG data
         if len(IG_match_for_this_patch_row) == 0:
-            print('Warning: A post in patch CSV was not downloaded from IG.')
+            comments.append('Warning: A post in patch CSV was not downloaded from IG.')
             continue
 
         if len(IG_match_for_this_patch_row) > 1:  # Each display_src should only occur once
-            print('Error: I have duplicate posts in downloads. Shouldve been deduped by now.')
-            print(IG_match_for_this_patch_row)
+            comments.append('Error: I have duplicate posts in downloads. Shouldve been deduped by now.')
+            comments.append(IG_match_for_this_patch_row)
             # Just keep the first one. Cuz really, all that matters in this kind of a database is that it's there once.
             IG_match_for_this_patch_row = IG_match_for_this_patch_row.head(1)
 
@@ -63,7 +62,7 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched):
         index_of_IG_data_to_patch = IG_match_for_this_patch_row.index
         data_df_patched.ix[index_of_IG_data_to_patch, 'caption'] = Anomaly_fix.ix[i, 'caption']
 
-    return data_df_patched
+    return data_df_patched,comments
 
 
 def check_for_null_captions(posts_df,comments):
@@ -79,3 +78,30 @@ def check_for_null_captions(posts_df,comments):
 
 
 
+def CHUG_it(search_term,comments,IG_links):
+    posts_df = download_all_photochug_posts()
+    posts_df.drop_duplicates(subset=['display_src'], inplace=True)
+
+    # QC:
+    comments.append('Reviewed '+ str(len(posts_df)) + 'lovely birds.')
+
+    posts_df,comments = patch_captions_that_are_NAN_or_anomaly(posts_df,comments)
+
+    # QC: Check if there are any more NAN captions I didn't patch. If so, soft warning
+    comments=check_for_null_captions(posts_df,comments)
+
+    j = 0
+
+    for i in posts_df.index:
+        this_post_caption=posts_df.ix[i, 'caption']
+
+        if str(search_term) in str(this_post_caption):
+            post_image = posts_df.ix[i, 'display_src']
+            # img_code = '<img src="' + post_image + '"' + ' height="300" width="300">'
+            IG_links.append(post_image)
+            j += 1
+
+    if j == 0:
+        comments.append('No matches, CHUG.')
+
+    return comments,IG_links
