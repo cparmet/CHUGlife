@@ -84,7 +84,10 @@ def check_for_null_captions(posts_df,comments):
 
 
 
-def CHUG_it(search_term,comments,IG_links):
+def CHUG_it(search_term,comments):
+    IG_links=[]
+    captions=[]
+
     posts_df = download_all_photochug_posts()
     posts_df.drop_duplicates(subset=['display_src'], inplace=True)
 
@@ -101,13 +104,12 @@ def CHUG_it(search_term,comments,IG_links):
     for i in posts_df.index:
         this_post_caption=posts_df.ix[i, 'caption']
 
-        if str(search_term) in str(this_post_caption):
-            post_image = posts_df.ix[i, 'display_src']
-            # img_code = '<img src="' + post_image + '"' + ' height="300" width="300">'
-            IG_links.append(post_image)
+        if str(search_term).lower() in str(this_post_caption).lower(): # Make them both lowercase for the match, so it's case-insensitive
+            IG_links.append(posts_df.ix[i, 'display_src'])
+            captions.append(this_post_caption)
             j += 1
 
     if j == 0:
         comments.append('No matches, CHUG.')
 
-    return comments,IG_links
+    return comments,IG_links,captions

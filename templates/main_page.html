@@ -39,9 +39,10 @@
                 </form>
             </div>
 
-            {% for IG_link in IG_links %}
+            {% for IG_link,caption in images_and_captions %}
                 <div class="row">
-                    <img src="{{ IG_link }}" style='width: 100%; object-fit: contain'> <!-- height="300" width="300" -->
+                    <img src="{{ IG_link }}" style='width: 100%; max-width:500px; object-fit: contain'>
+                    <p> {{ caption }} </p>
                 </div>
             {% endfor %}
         </div>
