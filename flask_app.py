@@ -39,14 +39,14 @@ def index():
 
         # This next block selects the appropriate grammar for the announcement text, depending on the number of posts we found and how to make the search_term plural
         if len(IG_links)==1:
-            comments.append("Here's your " + search_term + ":")
+            comments.append("Here's your " + search_term + ".")
         if len(IG_links)>1:
             if (search_term[-1] in 'xz') or (search_term[-2:-1] in 'chsh'): # Does the search_term end in x, z, ch, or sh?
-                comments.append("Here are your " + search_term + "es" + ":") # Then the plural form is -es
+                comments.append("Here are your " + search_term + "es" + ".") # Then the plural form is -es
             elif search_term[-1] == 's':
-                comments.append("Here are your " + search_term + ":")  # It already ends in -s. That makes grammatical sense, so keep it as is.
+                comments.append("Here are your " + search_term + ".")  # It already ends in -s. That makes grammatical sense, so keep it as is.
             else:
-                comments.append("Here are your " + search_term + "s" + ":")  # Otherwise, add -s to make it plural.
+                comments.append("Here are your " + search_term + "s" + ".")  # Otherwise, add -s to make it plural.
 
         # This tells browser "Please request this page again, this time using a 'GET' method", so that the user can see the results of their post
         return redirect(url_for('index'))
