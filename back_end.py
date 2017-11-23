@@ -20,7 +20,7 @@ def download_all_photochug_posts():
 def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
     '''
     This function fixes captions that are entered differently on Instagram.
-    It uploads patches from a CSV file and applies them.
+    It uploads patches from an XLS file (CSV was finnicky) and applies them.
     '''
 
     data_df_patched = data_df_unpatched.copy()
@@ -28,14 +28,13 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
     # Import my patches
     Anomaly_fix = pd.read_excel('chuglife/patches.xls', header=0)
 
-    # To get CSV file working right, i added an extra ' at end of display_src. Remove it.
-    # And note, to fix an issue with IG servers changing, display_src in patches file is only the jpg name.
+    # Force column names to import exactly as I want to refer to them. May no longer be a problem, but was an issue with CSVs.
     Anomaly_fix.columns = ['display_src', 'caption']
     Anomaly_fix.set_index('display_src', inplace=True)
 
     # Iterate through rows in the patch table (CSV)
     # Remember, about these indices:
-    # - In patch CSV, indices are URLs.
+    # - In patch table, display_src is only the jpg name, to fix an issue with IG servers changing.
     # - In IG_download, indices are sequential integers that will change as we post more photos.
 
     for i in Anomaly_fix.index:
