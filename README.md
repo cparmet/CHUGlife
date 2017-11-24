@@ -1,9 +1,11 @@
 # CHUGlife
 ~ Using Instagram as a database with Flask ~
 
-This web app searches one Instagram (IG) account for specific text and displays matching images and captions. It lets two nature photographers, @PhotoCHUG, use our IG account as a record of animal species we've seen and quickly retrieve them in the field.
+This web app searches one Instagram (IG) account for specific text and displays matching images and captions.
 
 ## Motivation
+A pair of nature photographers, posting at @PhotoCHUG, wanted to use our IG account as a record of the animal species we've seen and quickly retrieve that Lifelist in the field.
+
 On the IG website, I could not see how to search tags within a single IG account.
 
 ## Built with
