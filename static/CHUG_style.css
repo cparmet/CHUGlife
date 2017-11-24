@@ -1,0 +1,16 @@
+#spinning {
+    display: none;
+    border: 2px solid;
+    border-radius: 25px;
+    background: url("static/owl.gif") no-repeat 5px 3px;
+    }
+
+div#spinning_old {
+    top: 200 px;
+    margin: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 160px;
+    height: 24px;
+    cursor: wait;
+    }

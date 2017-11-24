@@ -6,7 +6,35 @@
         <meta name="viewport" content="width=device-width">
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+        <!--<link rel="stylesheet" type="text/css" href="static/CHUG_style.css">-->
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+        <script type="text/javascript">// <![CDATA[
+
+            function click_search(){
+                $("#spinning").show();
+            }
+        // ]]></script>
+
+        <style>
+            #spinning {
+                display: none; /* Hide this DIV to start. Click to show. */
+
+                margin:auto; /* Centers the box */
+                width: 200px;
+                height: 163px;
+                border: 2px solid;
+                border-color: brown;
+                border-radius: 20px;
+                /*background: url('/static/owl.gif') no-repeat;*/
+                /*background-size: contain;*/
+                /*background-position: left bottom;*/
+                text-align: center;
+                /*padding-bottom: 50px;*/
+                cursor: wait;
+            }
+        </style>
         <title>CHUG Life</title>
     </head>
 
@@ -31,12 +59,18 @@
             <div class="row">
                 <form action="." method="POST">
                     <input class="form-control input-lg" name="search_term" autofocus>
-                    <input type="submit" class="btn btn-success btn-lg" value="Search the lifelist">
+                    <input type="submit" class="btn btn-success btn-lg" value="Search the lifelist" onclick="click_search();">
                 </form>
             </div>
 
+            <div id="spinning" class="row">
+                <img src="static/owl.gif" height="125">
+                <!--<p></p>-->
+                <p><font size="4" color="brown"><b>Searching...</b></font></p>
+            </div>
+
             {% for comment in comments %}
-                <div class="row">
+                <div class="row" style="font-size: medium;">
                     {{ comment }}
                 </div>
             {% endfor %}
@@ -45,7 +79,7 @@
 
             {% for IG_link,caption in images_and_captions %}
                 <div class="row">
-                    <img src="{{ IG_link }}" style='width: 100%; max-width:500px; object-fit: contain'>
+                    <img src="{{ IG_link }}" style='width: 100%; max-width:500px; object-fit: contain;'>
                     <p> {{ caption }} </p>
                 </div>
             {% endfor %}
