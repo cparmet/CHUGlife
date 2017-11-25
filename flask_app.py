@@ -34,6 +34,11 @@ def index():
     if request.method == 'POST':
         search_term=request.form["search_term"]
 
+        # Gracefully handle blank search.
+        if search_term =='':
+            comments.append("Here's a photo of a snowy owl covered in snow standing on a glacier. (No search term received.)")
+            return redirect(url_for('index'))
+
         # If the search_term ends in 's' and it's at least 4 letters long,
         # cut off the s. So if you search for 'jays', CHUG will search for 'jay'
         if (search_term[-1] == 's') and (len(search_term)>=4):
