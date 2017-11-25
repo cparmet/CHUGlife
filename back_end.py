@@ -98,15 +98,25 @@ def CHUG_it(search_term,comments):
     # QC: Check if there are any more NAN captions I didn't patch. If so, soft warning
     comments=check_for_null_captions(posts_df,comments)
 
+    search_term=str(search_term).lower()
     j = 0
 
     for i in posts_df.index:
         this_post_caption=posts_df.ix[i, 'caption']
 
-        if str(search_term).lower() in str(this_post_caption).lower(): # Make them both lowercase for the match, so it's case-insensitive
+        if search_term in str(this_post_caption).lower(): # Make them both lowercase for the match, so it's case-insensitive
             IG_links.append(posts_df.ix[i, 'display_src'])
             captions.append(this_post_caption)
             j += 1
+            continue
+
+        # If we didn't find a match with the whole word, maybe we will if we strip out the blank spaces?
+        # So, search for "blue jay" also as "bluejay" Like a hashtag
+        if ' ' in search_term and search_term.replace(' ', '') in str(this_post_caption).lower():
+            IG_links.append(posts_df.ix[i, 'display_src'])
+            captions.append(this_post_caption)
+            j += 1
+
 
     if j == 0:
         comments.append('No matches, CHUG.')
