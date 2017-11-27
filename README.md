@@ -2,6 +2,8 @@
 
 This web app searches one Instagram (IG) account for specific text and displays matching images and captions.
 
+See it in action: www.chadparmet.com.
+
 ## Motivation
 A pair of nature photographers, posting at [@PhotoCHUG](www.instagram.com/photochug), wanted to use our IG account as a record of the animal species we've seen and quickly retrieve that Lifelist in the field. On the IG website, I could not see how to search tags within a single IG account.
 
