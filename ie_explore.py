@@ -1,5 +1,5 @@
 # Instagram Explore Module
-# from https://github.com/midnightSuyama/instagram-explore
+# from: https://github.com/midnightSuyama/instagram-explore
 
 from collections import namedtuple
 import requests
