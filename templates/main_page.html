@@ -12,10 +12,11 @@
 
         <script type="text/javascript">// <![CDATA[
 
-            function click_search(){
+            function reveal_animation(){
                 $("#spinning").show();
             }
-        // ]]></script>
+
+         // ]]></script>
 
         <style>
             #spinning {
@@ -58,8 +59,8 @@
 
             <div class="row">
                 <form action="." method="POST">
-                    <input class="form-control input-lg" name="search_term" autofocus>
-                    <input type="submit" class="btn btn-success btn-lg" value="Search the lifelist" onclick="click_search();">
+                    <input id="search_text_box" class="form-control input-lg" name="search_term" autofocus>
+                    <input type="submit" class="btn btn-success btn-lg" value="Search the lifelist" onclick="reveal_animation();">
                 </form>
             </div>
 
@@ -71,7 +72,7 @@
 
             {% for comment in comments %}
                 <div class="row" style="font-size: medium;">
-                    {{ comment }}
+                    <p>{{ comment }} </p>
                 </div>
             {% endfor %}
 
@@ -80,7 +81,7 @@
             {% for IG_link,caption in images_and_captions %}
                 <div class="row">
                     <img src="{{ IG_link }}" style='width: 100%; max-width:500px; object-fit: contain;'>
-                    <p> {{ caption }} </p>
+                    <p style='max-width:500px;'> {{ caption }} </p>
                 </div>
             {% endfor %}
         </div>
