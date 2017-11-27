@@ -1,6 +1,6 @@
 
-# A very simple Flask Hello World app for you to get started with...
-# https://blog.pythonanywhere.com/121/
+# The Flask app to connect the CHUG Life web page to the Python code that searches Instagram.
+# Based on Flask form app: https://blog.pythonanywhere.com/121/
 
 from flask import Flask, redirect, render_template, request, url_for
 import back_end as be

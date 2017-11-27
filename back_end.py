@@ -26,7 +26,7 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
     data_df_patched = data_df_unpatched.copy()
 
     # Import my patches
-    Anomaly_fix = pd.read_excel('chuglife/patches.xls', header=0)
+    Anomaly_fix = pd.read_excel('/home/cparmet/chuglife/patches.xls', header=0)
 
     # Force column names to import exactly as I want to refer to them. May no longer be a problem, but was an issue with CSVs.
     Anomaly_fix.columns = ['display_src', 'caption']
