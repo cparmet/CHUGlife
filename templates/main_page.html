@@ -12,9 +12,11 @@
 
         <script type="text/javascript">// <![CDATA[
 
-            function reveal_animation(){
-                $("#spinning").show();
-            }
+            $(document).ready(function() {
+                $('.search-form').on('submit', function(){
+                    $("#spinning").show();
+                });
+            });
 
          // ]]></script>
 
@@ -83,9 +85,9 @@
         <div class="container">
 
             <div class="row">
-                <form action="." method="POST">
+                <form action="." method="POST" class="search-form">
                     <input id="search_text_box" class="form-control input-lg" name="search_term" autofocus>
-                    <input type="submit" class="btn btn-success btn-lg" value="Search the lifelist" onclick="reveal_animation();">
+                    <input type="submit" class="btn btn-success btn-lg" value="Search the lifelist">
                 </form>
             </div>
 
