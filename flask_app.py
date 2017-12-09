@@ -32,6 +32,7 @@ def index():
         return render_template("main_page.html", comments=comments_to_display, images_and_captions=images_and_captions)
 
     if request.method == 'POST':
+
         search_term=request.form["search_term"]
 
         # Gracefully handle blank search.
@@ -41,7 +42,9 @@ def index():
 
         # If the search_term ends in 's' and it's at least 4 letters long,
         # cut off the s. So if you search for 'jays', CHUG will search for 'jay'
-        if (search_term[-1] == 's') and (len(search_term)>=4):
+        # Added exception for 'Ibis' that Doug found :)
+
+        if (search_term[-1] == 's') and (len(search_term)>=4) and search_term.lower()!='ibis':
             search_term = search_term[0:-1]
 
         # Pull the results
