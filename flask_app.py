@@ -57,7 +57,7 @@ def index():
         if len(IG_links)==1:
             comments.append("Here's your " + search_term + ".")
         if len(IG_links)>1:
-            if (search_term[-1] in 'xz') or (search_term[-2:-1] in 'chsh'): # Does the search_term end in x, z, ch, or sh?
+            if (search_term[-1] in 'xz') or (search_term[-2:] == 'ch') or (search_term[-2:]=='sh'): # Does the search_term end in x, z, ch, or sh?
                 comments.append("Here are your " + search_term + "es" + ".") # Then the plural form is -es
             elif search_term[-1] == 's':
                 comments.append("Here are your " + search_term + ".")  # It already ends in -s. That makes grammatical sense, so keep it as is.
