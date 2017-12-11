@@ -1,0 +1,12 @@
+#spinning {
+    display: none; /* Hide this DIV to start. Click to show. */
+
+    margin:auto; /* Centers the box */
+    width: 200px;
+    height: 163px;
+    border: 2px solid;
+    border-color: brown;
+    border-radius: 20px;
+    text-align: center;
+    cursor: wait;
+}

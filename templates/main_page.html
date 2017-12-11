@@ -6,9 +6,12 @@
         <meta name="viewport" content="width=device-width">
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-        <!--<link rel="stylesheet" type="text/css" href="static/CHUG_style.css">-->
+        <link rel="stylesheet" type="text/css" href="static/CHUGlife_styles.css">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <!-- When using 2.1.3 of jQuery, submitting search from iOS keyboard (instead of clicking Search button) wouldn't show the Search owl at all, i.e., wouldn't unhide the div.
+        <!-- iOS keyboard submit works after updating to version 3.2.1. -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
         <script type="text/javascript">// <![CDATA[
 
@@ -20,20 +23,7 @@
 
          // ]]></script>
 
-        <style>
-            #spinning {
-                display: none; /* Hide this DIV to start. Click to show. */
 
-                margin:auto; /* Centers the box */
-                width: 200px;
-                height: 163px;
-                border: 2px solid;
-                border-color: brown;
-                border-radius: 20px;
-                text-align: center;
-                cursor: wait;
-            }
-        </style>
         <title>CHUG Life</title>
 
         <!-- FAVICONS -->
@@ -70,8 +60,7 @@
                 <img src="/static/favicons/apple-touch-icon-57x57.png" style="border-radius: 50%;"/>
                 <font size="6" color="lightgray" style="vertical-align: middle;">&nbsp;CHUG Life</font>
 
-                <!-- Original code. When th elink was live, the order of img / title got reversed on iOS. -->
-
+                <!-- Original code. When the link was live, the order of img / title got reversed on iOS. -->
                 <!--<img class="navbar-left" src="/static/favicons/apple-touch-icon-57x57.png" style="border-radius: 50%;"/>-->
                 <!--<a class="navbar-brand" href="#">&nbsp;&nbsp;CHUG Life</a>-->
             </div>
@@ -89,7 +78,6 @@
 
             <div id="spinning" class="row">
                 <img src="static/owl.gif" height="125">
-                <!--<p></p>-->
                 <p><font size="4" color="brown"><b>Searching...</b></font></p>
             </div>
 

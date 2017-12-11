@@ -42,7 +42,7 @@ def index():
 
         # If the search_term ends in 's' and it's at least 4 letters long,
         # cut off the s. So if you search for 'jays', CHUG will search for 'jay'
-        # Added exception for 'Ibis' that Doug found :)
+        # Added exception for 'Ibis' that Doug found.
 
         if (search_term[-1] == 's') and (len(search_term)>=4) and search_term.lower()!='ibis':
             search_term = search_term[0:-1]
@@ -50,17 +50,24 @@ def index():
         # Pull the results
         comments, IG_links, captions = be.CHUG_it(search_term,comments)
 
-        # Announcement of results.
+        # Announce results!
         # This next block selects the appropriate grammar for the announcement text,
         # depending on the number of posts we found and how to make the search_term plural
 
+        # One result
         if len(IG_links)==1:
             comments.append("Here's your " + search_term + ".")
+
+        # Multiple results
         if len(IG_links)>1:
             if (search_term[-1] in 'xz') or (search_term[-2:] == 'ch') or (search_term[-2:]=='sh'): # Does the search_term end in x, z, ch, or sh?
                 comments.append("Here are your " + search_term + "es" + ".") # Then the plural form is -es
             elif search_term[-1] == 's':
                 comments.append("Here are your " + search_term + ".")  # It already ends in -s. That makes grammatical sense, so keep it as is.
+            elif search_term == 'deer' or search_term == 'fish' or search_term=='sheep' or search_term=='moose':
+                comments.append("Here are your " + search_term + ".")  # We shan't pluralize these!
+            elif search_term == 'goose':
+                comments.append("Here are your geese.")
             else:
                 comments.append("Here are your " + search_term + "s" + ".")  # Otherwise, add -s to make it plural.
 
