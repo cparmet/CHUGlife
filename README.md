@@ -5,7 +5,7 @@ This web app searches one Instagram (IG) account for specific text and displays 
 See it in action: www.chadparmet.com.
 
 ## Motivation
-A pair of nature photographers, posting at [@PhotoCHUG](https://www.instagram.com/photochug), wanted to use our IG account as a record of the animal species we've seen and quickly retrieve that Lifelist in the field. The IG app and website doesn't allow users to search for a hashtag filtered to a single account.
+A pair of nature photographers, posting at [@PhotoCHUG](https://www.instagram.com/photochug), wanted to use our IG account as a record of the animal species we've seen and quickly retrieve that Lifelist in the field. The IG app and website don't allow users to search for a hashtag filtered to a single account.
 
 ## Built with
 CHUGlife uses the fantastic [Instagram Explore Module](https://github.com/midnightSuyama/instagram-explore) by @midnightSuyama. I found it friendlier than the Instagram API for queries on a public IG account.
