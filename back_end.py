@@ -1,7 +1,6 @@
 # Download the IG posts
 # Clean the data, patching anomalies
 
-import ie_explore as ie
 import pandas as pd
 # import numpy as np
 # import regex
