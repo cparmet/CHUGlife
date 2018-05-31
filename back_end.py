@@ -90,7 +90,7 @@ def CHUG_it(search_term,comments):
     posts_df.drop_duplicates(subset=['display_src'], inplace=True)
 
     # QC:
-    comments.append('Reviewed '+ str(len(posts_df)) + ' award-winning photos.')
+    comments.append('Reviewed '+ str(len(posts_df)) + ' photos.')
 
     posts_df,comments = patch_captions_that_are_NAN_or_anomaly(posts_df,comments)
 
