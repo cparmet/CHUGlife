@@ -34,7 +34,7 @@ def merge_cache_with_onscreen(cache_df, on_screen_df):
     cache_df['img_name'] = cache_df['display_url'].apply(f)
     on_screen_df['img_name'] = on_screen_df['display_url'].apply(f)
 
-    merged = posts.merge(on_screen_df, how='outer', on='img_name')
+    merged = cache_df.merge(on_screen_df, how='outer', on='img_name')
     merged = merged.fillna('')
 
     col_rename = {"comment_x": "comment_from_json", "comment_y": "comment_on_screen"}
