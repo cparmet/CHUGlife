@@ -1,20 +1,128 @@
 # Download the IG posts
-# Clean the data, patching anomalies
+# Clean the data
 
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+import re
+
 # import numpy as np
 # import regex
 
-def download_all_photochug_posts():
-    data, cursor = ie.user('photochug')
-    downloaded_posts_df = pd.DataFrame(data['media']['nodes'])
-
-    for i in range(10):  # 10 runs to grab up to 12 posts each, N=120 max
-        posts_more, cursor = ie.user('photochug', cursor)
-        posts_more_df = pd.DataFrame(posts_more['media']['nodes'])
-        downloaded_posts_df = pd.concat([downloaded_posts_df, posts_more_df], ignore_index=True)
-        #     time.sleep(0.1)
+def download_cache_of_posts():
+    cache_url = 'https://s3.amazonaws.com/chuglife/chugs_cache.xlsx'
+    downloaded_posts_df = pd.read_excel(cache_url)
     return downloaded_posts_df
+
+## Functions to scrape Instagram for current posts
+def extract_comment(post):
+    ''' Extract comment from on-screen post metadata'''
+    result = re.search('.+?"}', post)
+    comment = result.group(0)[1:-2] # The 1 and -2 are to strip unnecessary characters.
+    comment = comment.replace('\\n',' ') # Line breaks. Note here it's two backslashes.
+    return comment
+
+def extract_url(post):
+    ''' Extract URL from the on-screen posts metadata'''
+    # https://stackoverflow.com/questions/6109882/regex-match-all-characters-between-two-strings
+    result = re.search('(?<=display_url":")(.*)(?=edge_liked_by)', post)
+    return result.group(0)[0:-3]
+
+def merge_cache_with_onscreen(cache_df, on_screen_df):
+    ''' Combine the two dataframes'''
+    f = lambda path: path.split('/')[-1]
+    cache_df['img_name'] = cache_df['display_url'].apply(f)
+    on_screen_df['img_name'] = on_screen_df['display_url'].apply(f)
+
+    merged = posts.merge(on_screen_df, how='outer', on='img_name')
+    merged = merged.fillna('')
+
+    col_rename = {"comment_x": "comment_from_json", "comment_y": "comment_on_screen"}
+    merged = merged.rename(index=str, columns=col_rename)
+
+    return merged
+
+def harmonize_comments(merged):
+    merged['comment'] = ''
+
+    for i, post in merged.iterrows():
+        comment_json = post['comment_from_json']
+        comment_screen = post['comment_on_screen']
+        comment = ''
+        if len(comment_json) <= 1:
+            if len(comment_screen) <= 1:
+                comment = ''  # Both comments are blank or only 1 character long. No comment.
+            else:
+                comment = comment_screen  # JSON comment is <=1c long, but on-screen comment isn't. Use latter.
+        else:
+            if len(comment_screen) <= 1:
+                comment = comment_json  # On-screen comment is <=1c long, but JSON isn't. Use latter.
+            else:  # Both comments have substance.
+                if comment_json == comment_screen:
+                    comment = comment_json  # Both comments are the same. Use json
+                else:
+                    raise ValueError('Error while updating cache of posts with on-screen scrape. Conflict with comments at post: ' + str(post['display_url']))
+
+        merged.ix[i, 'comment'] = comment
+
+    merged = merged.drop(['comment_from_json', 'comment_on_screen'], axis=1)
+
+    return merged
+
+
+def harmonize_display_url(merged):
+    ''' Harmonize display_url from JSON cached posts with that from on-screen scrape.'''
+    merged['display_url'] = ''
+
+    for i, post in merged.iterrows():
+        url = ''
+        url_json = post['display_url_x']
+        url_screen = post['display_url_y']
+
+        # Reminder, we've already merged JSON and On-screen DFs using img_name as the key
+        # Urls may differ between JSON and On_screen. That's normal.
+        # But shouldn't have any duplicate img_names, after the merge.
+
+        if len(url_json) <= 1:
+            if len(url_screen) <= 1:
+                # Both urls are missing
+                raise ValueError(
+                    'Error while updating cache of posts with on-screen scrape. Display_url missing at post: ' + str(
+                        post))
+            else:
+                url = url_screen  # JSON has no url, but on-screen scrape did. Use latter.
+        else:
+            url = url_json  # JSON has a url, but on-screen doesn't. Use that.
+
+        merged.ix[i, 'display_url'] = url
+
+    merged = merged.drop(['display_url_x', 'display_url_y'], axis=1)
+
+    return merged
+
+
+def update_cache_with_current_posts(cache_df):
+    '''Scrape Instagram for the latest posts'''
+
+    user_name = 'photochug'
+    url = "https://www.instagram.com/%s/" % user_name
+    res = requests.get(url)
+    html = BeautifulSoup(res.content, 'html.parser')
+    data = res.text.split('"node":{"text":')[1:]
+
+    cols = ['display_url', 'comment']
+    on_screen_df = pd.DataFrame(columns=cols)
+
+    # Make a dataframe out of everything on screen
+    for i, post in enumerate(data):
+        on_screen_df.loc[i, 'display_url'] = extract_url(post)
+        on_screen_df.loc[i, 'comment'] = extract_comment(post)
+
+    merged = merge_cache_with_onscreen(cache_df, on_screen_df)
+    merged = harmonize_comments(merged)
+    merged = harmonize_display_url(merged)
+
+    return merged
 
 def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
     '''
@@ -86,8 +194,9 @@ def CHUG_it(search_term,comments):
     IG_links=[]
     captions=[]
 
-    posts_df = download_all_photochug_posts()
-    posts_df.drop_duplicates(subset=['display_src'], inplace=True)
+    cache_df = download_cache_of_posts()
+    posts_df = update_cache_with_current_posts(cache_df)
+    posts_df.drop_duplicates(subset=['img_name'], inplace=True)
 
     # QC:
     comments.append('Reviewed '+ str(len(posts_df)) + ' photos.')
