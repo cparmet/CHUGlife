@@ -136,34 +136,34 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
     Anomaly_fix = pd.read_excel('/home/cparmet/chuglife/patches.xls', header=0)
 
     # Force column names to import exactly as I want to refer to them. May no longer be a problem, but was an issue with CSVs.
-    Anomaly_fix.columns = ['display_src', 'caption']
-    Anomaly_fix.set_index('display_src', inplace=True)
+    Anomaly_fix.columns = ['img_name', 'caption']
+    Anomaly_fix.set_index('img_name', inplace=True)
 
     # Iterate through rows in the patch table (CSV)
     # Remember, about these indices:
-    # - In patch table, display_src is only the jpg name, to fix an issue with IG servers changing.
+    # - In patch table, img_name is only the jpg name, to fix an issue with IG servers changing.
     # - In IG_download, indices are sequential integers that will change as we post more photos.
 
     for i in Anomaly_fix.index:
 
-        # Find the indices in downloaded IG data that match the rows I have in Anomaly_fix csvIG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['display_src'] == i]
+        # Find the indices in downloaded IG data that match the rows I have in Anomaly_fix csvIG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['img_name'] == i]
 
-        # IG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['display_src'] == i]
+        # IG_match_for_this_patch_row = data_df_patched.loc[data_df_patched['img_name'] == i]
 
         matches=0
         for j in data_df_patched.index:
-            if i in data_df_patched.ix[j, 'display_src']:
+            if i in data_df_patched.ix[j, 'img_name']:
                 index_of_IG_data_to_patch = j
                 matches+=1 # If there's more than 1 match, this 'for' loop will only save the last match. But this counter will be >1.
 
         ########
         # Soft QC. Use this opportunity for extra QC of the downloaded IG data.
-        # All display_srcs from the Anomaly_fix CSV should be in downloaded IG data
+        # All img_name from the Anomaly_fix CSV should be in downloaded IG data
         if matches == 0:
             comments.append('Warning: A post in patch CSV was not downloaded from IG.')
             continue
 
-        if matches > 1:  # Each display_src should only occur once
+        if matches > 1:  # Each img_name should only occur once
             comments.append("Error: I have duplicate posts in downloads. Should've been de-duped by now.")
             # comments.append(IG_match_for_this_patch_row)
             # Just keep the first one. Cuz really, all that matters in this kind of a database is that it's there once.
@@ -180,7 +180,7 @@ def patch_captions_that_are_NAN_or_anomaly(data_df_unpatched,comments):
 def check_for_null_captions(posts_df,comments):
     ''' QC: any null captions remain? Then give a soft warning'''
 
-    null_captions_df = posts_df.ix[posts_df.caption.isnull(), 'display_src']
+    null_captions_df = posts_df.ix[posts_df.caption.isnull(), 'img_name']
 
     if len(null_captions_df) != 0:
         comments.append('Warning: Null captions:')
@@ -213,7 +213,7 @@ def CHUG_it(search_term,comments):
         this_post_caption=posts_df.ix[i, 'caption']
 
         if search_term in str(this_post_caption).lower(): # Make them both lowercase for the match, so it's case-insensitive
-            IG_links.append(posts_df.ix[i, 'display_src'])
+            IG_links.append(posts_df.ix[i, 'display_url'])
             captions.append(this_post_caption)
             j += 1
             continue
@@ -221,7 +221,7 @@ def CHUG_it(search_term,comments):
         # If we didn't find a match with the whole word, maybe we will if we strip out the blank spaces?
         # So, search for "blue jay" also as "bluejay" Like a hashtag
         if ' ' in search_term and search_term.replace(' ', '') in str(this_post_caption).lower():
-            IG_links.append(posts_df.ix[i, 'display_src'])
+            IG_links.append(posts_df.ix[i, 'display_url'])
             captions.append(this_post_caption)
             j += 1
 
