@@ -10,7 +10,8 @@ A pair of nature photographers posting at [@PhotoCHUG](https://www.instagram.com
 But instagram doesn't allow users to search for hashtags/captions filtered to only search within the posts of one single account. CHUGLife is a web app to exceute that one type of query.
 
 ## Built with
-Back end: Beautiful Soup, Pandas, Regex,
+Back end: Beautiful Soup, Pandas, Regex
+
 Front end: Flask, Bootstrap CSS, a little JQuery
 
 The app was modified in Spring 2018 to be more resilient to website changes made on instagram.com. Such changes broke the IG-scraping package I used originally, [Instagram Explore](https://github.com/midnightSuyama/instagram-explore).
