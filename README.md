@@ -2,7 +2,7 @@
 
 This web app searches one Instagram (IG) account for specific captions. It displays matching images and captions.
 
-See it in action: [chuglife.chadparmet.com](chuglife.chadparmet.com).
+See it in action: [chuglife.chadparmet.com](http://chuglife.chadparmet.com).
 
 ## Why create it?
 A pair of nature photographers posting at [@PhotoCHUG](https://www.instagram.com/photochug) wanted to use our IG account as a shared database. We wanted to quickly query to see which animal species we've photographed, while in the field or at home reviewing shots.
