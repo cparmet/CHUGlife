@@ -17,4 +17,4 @@ The app was modified in Spring 2018 to be more resilient to website changes made
 
 Separate from the web app, a Python script runs daily to update a file on AWS S3 that caches the database. The cache was initially loaded with [Instagram Scraper](https://github.com/rarcega/instagram-scraper).
 
-The animated owl on the web page is by the super talented [Irina Mir](https://dribbble.com/shots/3053961-Owl-head-spin), used with kind permission.
+The animated owl on the web page is by the super-talented [Irina Mir](https://dribbble.com/shots/3053961-Owl-head-spin), used with kind permission.
