@@ -1,15 +1,18 @@
 # CHUGlife
 
-This web app searches one Instagram (IG) account for specific text and displays matching images and captions.
+This web app searches one Instagram (IG) account for specific captions. It displays matching images and captions.
 
-See it in action: www.chadparmet.com.
+See it in action: chuglife.chadparmet.com.
 
-## Motivation
-A pair of nature photographers, posting at [@PhotoCHUG](https://www.instagram.com/photochug), wanted to use our IG account as a record of the animal species we've seen and quickly retrieve that Lifelist in the field. The IG app and website don't allow users to search for a hashtag filtered to a single account.
+## Why create it?
+A pair of nature photographers posting at [@PhotoCHUG](https://www.instagram.com/photochug) wanted to use our IG account as a shared database. We wanted to quickly query to see which animal species we've photographed, while in the field or at home reviewing shots.
+
+But instagram doesn't allow users to search for hashtags/captions filtered to only search within the posts of one single account. CHUGLife is an interface to do that one type of query.
 
 ## Built with
-CHUGlife uses the fantastic [Instagram Explore Module](https://github.com/midnightSuyama/instagram-explore) by @midnightSuyama. I found it friendlier than the Instagram API for queries on a public IG account.
+Back end: Beautiful Soup, Pandas, Regex,
+Front end: Flask, Bootstrap CSS, a little JQuery
 
-It also uses Pandas and Numpy on the backend, as well as Flask, Bootstrap CSS, and a little JQuery for the web interface.
+Separate from the web app, a Python script runs daily to update a file on AWS S3 that caches the database. The cache was initially loaded with [Instagram Scraper](https://github.com/rarcega/instagram-scraper).
 
-The owl when searching is by the super talented [Irina Mir](https://dribbble.com/shots/3053961-Owl-head-spin), used with kind permission.
+The animated owl on the web page is by the super talented [Irina Mir](https://dribbble.com/shots/3053961-Owl-head-spin), used with kind permission.
