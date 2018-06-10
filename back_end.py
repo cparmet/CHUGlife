@@ -25,8 +25,15 @@ def extract_comment(post):
 def extract_url(post):
     ''' Extract URL from the on-screen posts metadata'''
     # https://stackoverflow.com/questions/6109882/regex-match-all-characters-between-two-strings
-    result = re.search('(?<=display_url":")(.*)(?=edge_liked_by)', post)
+
+    # June 9, 2018: After changes on Instagram.com, replaced Regex pattern to grab the right URL
+     # Was:
+        # result = re.search('(?<=display_url":")(.*)(?=edge_liked_by)', post)
+        # return result.group(0)[0:-3]
+    result = re.search('(?<=thumbnail_src":").*?.jpg', post)
+    return result.group(0)
     return result.group(0)[0:-3]
+
 
 def merge_cache_with_onscreen(cache_df, on_screen_df):
     ''' Combine the two dataframes'''
